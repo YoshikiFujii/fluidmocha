@@ -1,5 +1,7 @@
 # 入寮・出欠管理システム FluidMocha
 
+![FluidMocha Logo](src/images/mocha-logo.png)
+
 手動入力を用いた、イベントの出欠確認および入寮受付ステータス管理システムです。
 以前のFluidと異なり、マルチプラットフォームなWebアプリケーションです。
 
