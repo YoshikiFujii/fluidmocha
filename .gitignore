@@ -1,0 +1,17 @@
+# System Files
+.DS_Store
+Thumbs.db
+
+# Dependencies
+vendor/
+
+# Configuration (Sensitive)
+src/api/db.php
+
+# User Data
+src/uploads/*
+!src/uploads/.gitkeep
+
+# Logs & Temp
+*.log
+tmp/

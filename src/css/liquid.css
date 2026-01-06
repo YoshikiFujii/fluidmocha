@@ -1,0 +1,132 @@
+/* Stats Grid System (Restored) */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+}
+
+.stat-card {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 16px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    position: relative;
+    overflow: hidden;
+    min-height: 120px;
+    display: flex;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.stat-card.wide {
+    grid-column: span 2;
+}
+
+@media (max-width: 600px) {
+    .stat-card.wide {
+        grid-column: span 1;
+    }
+}
+
+.stat-value {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--primary-color);
+    position: relative;
+    z-index: 2;
+}
+
+.stat-label {
+    font-size: 0.875rem;
+    color: #6b7280;
+    position: relative;
+    z-index: 2;
+}
+
+/* Liquid Card Container */
+.liquid-card {
+    background: white;
+    position: relative;
+    overflow: hidden;
+    /* Clip the waves/water outside */
+    border: 1px solid #dbeafe;
+    z-index: 0;
+}
+
+/* Text on top override for liquid card */
+.liquid-card .stat-value,
+.liquid-card .stat-label {
+    position: relative;
+    z-index: 10;
+    /* Ensure text is readable against green or white */
+    text-shadow: 0 1px 2px rgba(255, 255, 255, 0.8);
+    /* color: white; Optional if we want white text always, but shadow helps */
+}
+
+/* The Water Column */
+.liquid-fill {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background-color: #4ade80;
+    /* Solid Green Body */
+    z-index: 1;
+    transition: height 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    min-height: 0px;
+}
+
+/* The Wave SVG sits on top of the water column */
+.waves {
+    position: absolute;
+    top: -20px;
+    /* Adjusted magnitude */
+    left: 0;
+    width: 100%;
+    height: 20px;
+    /* Half height */
+    margin-bottom: -1px;
+    /* Stitching fix */
+}
+
+/* Parallax Animation */
+.parallax>use {
+    animation: move-forever 25s cubic-bezier(.55, .5, .45, .5) infinite;
+}
+
+.parallax>use:nth-child(1) {
+    animation-delay: -2s;
+    animation-duration: 7s;
+    fill: rgba(74, 222, 128, 0.7);
+    /* Green-400 with opacity */
+}
+
+.parallax>use:nth-child(2) {
+    animation-delay: -3s;
+    animation-duration: 10s;
+    fill: rgba(74, 222, 128, 0.5);
+}
+
+.parallax>use:nth-child(3) {
+    animation-delay: -4s;
+    animation-duration: 13s;
+    fill: rgba(74, 222, 128, 0.3);
+}
+
+.parallax>use:nth-child(4) {
+    animation-delay: -5s;
+    animation-duration: 20s;
+    fill: #4ade80;
+    /* Match body color */
+}
+
+@keyframes move-forever {
+    0% {
+        transform: translate3d(-90px, 0, 0);
+    }
+
+    100% {
+        transform: translate3d(85px, 0, 0);
+    }
+}

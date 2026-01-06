@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Attendance System</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/liquid.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/png" href="images/mocha-logo.png">
+</head>
+
+<body>
+    <div class="login-container">
+        <div class="glass-card login-box">
+            <img src="images/mocha-logo.png" alt="Mocha Logo" style="max-width: 225px; margin-bottom: 1rem;">
+            <form id="loginForm">
+                <div class="input-group">
+                    <label>ユーザー名</label>
+                    <input type="text" id="username" required placeholder="admin">
+                </div>
+                <div class="input-group">
+                    <label>パスワード</label>
+                    <input type="password" id="password" required placeholder="password">
+                </div>
+                <button type="submit" class="btn-primary">ログイン</button>
+                <p id="errorMsg" style="color: red; margin-top: 1rem; display: none;"></p>
+            </form>
+        </div>
+    </div>
+    <script src="js/login.js"></script>
+    <script src="js/background.js"></script>
+</body>
+
+</html>

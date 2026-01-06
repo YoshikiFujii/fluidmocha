@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reception - Attendance System</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/liquid.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+    <link rel="icon" type="image/png" href="images/mocha-logo.png">
+</head>
+
+<body class="auth-loading">
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <nav class="sidebar">
+            <div class="sidebar-header">
+                <div class="sidebar-title">
+                    <img src="images/mocha-logo.png" alt="Mocha Logo" style="max-width: 120px; height: auto;">
+                </div>
+                <div class="sidebar-toggle" onclick="toggleSidebar()">
+                    <i class="ri-menu-fold-line"></i>
+                </div>
+            </div>
+            <div class="nav-item active">
+                <i class="ri-calendar-event-line"></i> <span class="nav-text">イベント</span>
+            </div>
+            <div style="margin-top: auto;">
+                <div style="padding: 0 1.5rem 0.5rem; font-size: 0.8rem; color: #666; font-weight: 500;">受付</div>
+                <div class="nav-item" onclick="logout()">
+                    <i class="ri-logout-box-line"></i> <span class="nav-text">ログアウト</span>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="main-content">
+
+            <!-- Events Tab -->
+            <div id="tab-events">
+                <div class="header-controls">
+                    <h2>イベント一覧 (受付用)</h2>
+                </div>
+                <!-- Event List -->
+                <div id="eventList" class="list-container">
+                    <!-- Loaded via JS -->
+                </div>
+            </div>
+
+            <!-- Event Details View (Hidden by default) -->
+            <div id="view-event-details" class="hidden">
+                <div class="header-controls">
+                    <button class="btn-secondary" onclick="backToEvents()">
+                        <i class="ri-arrow-left-line"></i> 戻る
+                    </button>
+                    <h2 id="detailEventName">イベント名</h2>
+                    <button class="btn-secondary" onclick="openColumnSettings('event')">
+                        <i class="ri-settings-3-line"></i> 表示設定
+                    </button>
+                </div>
+
+                <!-- Search Box -->
+                <div class="glass-card" style="padding: 1.5rem; margin-bottom: 2rem;">
+                    <div style="display: flex; gap: 1rem; align-items: center;">
+                        <i class="ri-search-line" style="font-size: 1.5rem; color: #666;"></i>
+                        <input type="text" id="studentSearch" placeholder="名前で検索..."
+                            style="width: 100%; font-size: 1.2rem; padding: 0.5rem; border: none; background: transparent; outline: none;">
+                    </div>
+                    <div id="statusFilters" style="display: flex; gap: 1rem; margin-top: 1rem; flex-wrap: wrap;">
+                        <!-- Checkboxes loaded via JS -->
+                    </div>
+                </div>
+
+                <div class="glass-card" style="padding: 0;">
+                    <table style="width: 100%; border-collapse: collapse;">
+                        <thead style="background: rgba(0,0,0,0.05); border-bottom: 1px solid #ddd;">
+                            <tr>
+                                <th class="col-status" style="padding: 1rem; text-align: left;">状態</th>
+                                <th class="col-name" style="padding: 1rem; text-align: left;">氏名</th>
+                                <th class="col-kana" style="padding: 1rem; text-align: left;">かな</th>
+                                <th class="col-gender" style="padding: 1rem; text-align: left;">性別</th>
+                                <th class="col-room" style="padding: 1rem; text-align: left;">部屋番号</th>
+                                <th class="col-floor" style="padding: 1rem; text-align: left;">階</th>
+                                <th class="col-category" style="padding: 1rem; text-align: left;">区分</th>
+                                <th class="col-hometown" style="padding: 1rem; text-align: left;">出身</th>
+                                <th class="col-student_num" style="padding: 1rem; text-align: left;">学籍番号</th>
+                                <th class="col-department" style="padding: 1rem; text-align: left;">学科</th>
+                                <th class="col-note" style="padding: 1rem; text-align: left;">備考</th>
+                            </tr>
+                        </thead>
+                        <tbody id="attendanceList">
+                            <!-- Rows loaded via JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <!-- Status Selection Modal -->
+    <div id="statusSelectionModal" class="modal">
+        <div class="modal-content glass-card">
+            <h3>ステータス変更</h3>
+            <p id="statusSelectionMessage" style="margin: 1.5rem 0; font-size: 1.1rem;">message</p>
+            <div id="statusSelectionButtons"
+                style="display: flex; gap: 1rem; margin-top: 1.5rem; justify-content: center; flex-wrap: wrap;">
+                <!-- Buttons loaded via JS -->
+            </div>
+            <div style="margin-top: 1rem; text-align: center;">
+                <button type="button" class="btn-secondary" onclick="closeModal('statusSelectionModal')">キャンセル</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Column Settings Modal -->
+    <div id="columnSettingsModal" class="modal">
+        <div class="modal-content glass-card">
+            <h3>表示カラム設定</h3>
+            <div id="columnSettingsContainer"
+                style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem;">
+                <!-- Checkboxes loaded via JS -->
+            </div>
+            <div style="display: flex; gap: 1rem;">
+                <button type="button" class="btn-secondary" onclick="closeModal('columnSettingsModal')">閉じる</button>
+                <button type="button" class="btn-primary" onclick="saveColumnSettings()">保存</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/app.js"></script>
+    <script>
+        // Globals
+        let currentStudents = [];
+        let currentEventId = null;
+        let currentPreset = 'default';
+        let pendingChange = null;
+        let pollingInterval = null;
+
+        // PRESET_NAMES comes from app.js
+
+        // Auto-refresh Logic
+        function startPolling(eventId) {
+            stopPolling(); // Clear existing
+            pollingInterval = setInterval(() => checkUpdates(eventId), 5000);
+        }
+
+        function stopPolling() {
+            if (pollingInterval) {
+                clearInterval(pollingInterval);
+                pollingInterval = null;
+            }
+        }
+
+        // Sound Logic
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+        function playNotification() {
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+            const oscillator = audioCtx.createOscillator();
+            const gainNode = audioCtx.createGain();
+
+            oscillator.type = 'sine';
+            oscillator.frequency.setValueAtTime(523.25, audioCtx.currentTime); // C5
+            oscillator.frequency.exponentialRampToValueAtTime(1046.5, audioCtx.currentTime + 0.1); // C6
+
+            gainNode.gain.setValueAtTime(0.5, audioCtx.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.5);
+
+            oscillator.connect(gainNode);
+            gainNode.connect(audioCtx.destination);
+
+            oscillator.start();
+            oscillator.stop(audioCtx.currentTime + 0.5);
+        }
+
+        async function checkUpdates(eventId) {
+            try {
+                const res = await fetch(`api/event.php?id=${eventId}`);
+                const data = await res.json();
+                const newStudents = data.students;
+
+                const currentMap = new Map(currentStudents.map(s => [s.internal_id, s]));
+                let shouldPlaySound = false;
+                let hasChanges = false;
+
+                // Check for changes and arrivals
+                for (const newStudent of newStudents) {
+                    const oldStudent = currentMap.get(newStudent.internal_id);
+                    if (oldStudent) {
+                        if (oldStudent.status !== newStudent.status) {
+                            hasChanges = true;
+                            // Check if changed TO 'arrived'
+                            if (newStudent.status === 'arrived' && oldStudent.status !== 'arrived') {
+                                shouldPlaySound = true;
+                            }
+                        }
+                    } else {
+                        hasChanges = true;
+                    }
+                }
+
+                if (hasChanges) {
+                    currentStudents = newStudents;
+                    filterStudents(document.getElementById('studentSearch').value);
+
+                    if (shouldPlaySound) {
+                        playNotification();
+                    }
+                }
+            } catch (e) {
+                console.error("Polling error", e);
+            }
+        }
+
+        async function showReceptionEventDetails(eventId) {
+            document.getElementById('tab-events').classList.add('hidden');
+            document.getElementById('view-event-details').classList.remove('hidden');
+
+            const res = await fetch(`api/event.php?id=${eventId}`);
+            const data = await res.json();
+            const evt = data.event;
+            const students = data.students;
+
+            const presetLabel = PRESET_NAMES[evt.preset] || PRESET_NAMES['default'];
+            document.getElementById('detailEventName').innerText = `${evt.name} (${presetLabel})`;
+
+            // Sync Globals
+            currentStudents = students;
+            currentEventId = eventId;
+            currentPreset = evt.preset || 'default';
+
+            renderStatusFilters();
+            // Trigger filter immediately to apply Gender/Status constraints
+            filterStudents('');
+
+            // Start Polling
+            startPolling(eventId);
+        }
+
+        // We need to override backToEvents to stop polling
+        // Since backToEvents is in app.js and simple, we can just overwrite the button onclick in HTML?
+        // Or override the global function if it was global.
+        // app.js defines `backToEvents` globally.
+
+        const originalBackToEvents = window.backToEvents; // It might not be attached to window explicitly but usually is.
+        // Actually app.js functions are in global scope.
+
+        window.backToEvents = function () {
+            stopPolling();
+            document.getElementById('view-event-details').classList.add('hidden');
+            document.getElementById('tab-events').classList.remove('hidden');
+            loadReceptionEvents();
+        }
+
+        // Force override of globals
+        window.loadEvents = loadReceptionEvents;
+        window.showEventDetails = showReceptionEventDetails;
+
+        function renderStatusFilters() {
+            const container = document.getElementById('statusFilters');
+            container.innerHTML = '';
+
+            const statusMap = PRESET_STATUSES[currentPreset] || PRESET_STATUSES['default'];
+
+            Object.keys(statusMap).forEach(key => {
+                let bg = getStatusColor(key);
+                if (currentPreset === 'entry_management') bg = PRESET_COLORS[key] || bg;
+
+                const label = document.createElement('label');
+                label.style.display = 'flex';
+                label.style.alignItems = 'center';
+                label.style.gap = '0.5rem';
+                label.style.cursor = 'pointer';
+                label.style.padding = '0.25rem 0.75rem';
+                label.style.borderRadius = '20px';
+                label.style.background = 'rgba(255, 255, 255, 0.5)';
+                label.style.border = '1px solid #ddd';
+
+                const checkbox = document.createElement('input');
+                checkbox.type = 'checkbox';
+                checkbox.value = key;
+                checkbox.checked = true;
+                checkbox.onchange = () => filterStudents(document.getElementById('studentSearch').value);
+
+                // Filter for Souhou: Only show Arrived and Reception Done (and Guiding if we want to show it?)
+                // User said: "Souhou shows Arrived OR Reception Done AND Male"
+                // So we likely only want checkboxes for these? Or just pre-select them?
+                // I'll show checkboxes for clarity but maybe hide others?
+                // Actually, let's just show relevant ones.
+                if (['arrived', 'reception_done', 'guiding'].includes(key)) {
+                    label.appendChild(checkbox);
+                    label.appendChild(document.createTextNode(statusMap[key]));
+                    container.appendChild(label);
+                }
+            });
+        }
+
+        async function loadReceptionEvents() {
+            try {
+                const res = await fetch('api/event.php');
+                const events = await res.json();
+                const list = document.getElementById('eventList');
+                list.innerHTML = '';
+
+                events.forEach(event => {
+                    const date = new Date(event.created_at).toLocaleDateString();
+                    const div = document.createElement('div');
+                    div.className = 'card';
+
+                    const presetLabel = PRESET_NAMES[event.preset] || PRESET_NAMES['default'];
+                    const displayName = `${event.name} (${presetLabel})`;
+
+                    // Simple card without edit buttons
+                    div.innerHTML = `
+                        <h3 style="margin: 0 0 0.5rem 0;">${displayName}</h3>
+                        <p style="color: #666; font-size: 0.9rem; margin: 0;">Roster: ${event.roster_name}</p>
+                        <div style="margin-top: 1rem; display: flex; justify-content: space-between; align-items: center;">
+                            <span style="font-size: 0.8rem; color: #999;">${date}</span>
+                            <span style="font-size: 0.85rem; background: #e0e7ff; color: #4338ca; padding: 2px 8px; border-radius: 4px;">Present: ${event.present_count}</span>
+                        </div>
+                    `;
+                    div.onclick = () => showReceptionEventDetails(event.id);
+                    list.appendChild(div);
+                });
+            } catch (e) {
+                console.error(e);
+            }
+        }
+
+        function renderEntranceList(students) {
+            const tbody = document.getElementById('attendanceList');
+            tbody.innerHTML = '';
+
+            const statusMap = PRESET_STATUSES[currentPreset] || PRESET_STATUSES['default'];
+            const defaultStatus = currentPreset === 'entry_management' ? 'not_arrived' : 'absent';
+
+            students.forEach(student => {
+                const tr = document.createElement('tr');
+                tr.style.borderBottom = '1px solid #eee';
+                tr.style.cursor = 'pointer';
+                tr.className = 'clickable-row';
+
+                tr.onmouseover = function () { this.style.backgroundColor = 'rgba(0,0,0,0.02)'; };
+                tr.onmouseout = function () { this.style.backgroundColor = ''; };
+
+                const currentStatus = student.status || defaultStatus;
+
+                let bg = getStatusColor(currentStatus);
+                if (currentPreset === 'entry_management') bg = PRESET_COLORS[currentStatus] || bg;
+
+                const label = statusMap[currentStatus] || currentStatus;
+
+                const statusHtml = `
+                <div style="padding: 0.5rem 1rem; border-radius: 6px; background: ${bg}; display: inline-block;">
+                    ${label}
+                </div>
+            `;
+
+                tr.innerHTML = `
+                <td class="col-status" style="padding: 1rem;">${statusHtml}</td>
+                <td class="col-name" style="padding: 1rem;">${student.name}</td>
+                <td class="col-kana" style="padding: 1rem;">${student.kana || ''}</td>
+                <td class="col-gender" style="padding: 1rem;">${student.gender || ''}</td>
+                <td class="col-room" style="padding: 1rem;">${student.room || '-'}</td>
+                <td class="col-floor" style="padding: 1rem;">${student.floor || ''}</td>
+                <td class="col-category" style="padding: 1rem;">${student.category || ''}</td>
+                <td class="col-hometown" style="padding: 1rem;">${student.hometown || ''}</td>
+                <td class="col-student_num" style="padding: 1rem;">${student.student_num || ''}</td>
+                <td class="col-department" style="padding: 1rem;">${student.department || ''}</td>
+                <td class="col-note" style="padding: 1rem;">${student.note || ''}</td>
+            `;
+
+                // Re-bind click handler
+                tr.onclick = (e) => {
+                    if (e.target.tagName === 'INPUT' || e.target.tagName === 'SELECT') return;
+                    e.stopPropagation();
+                    openStatusSelection(student.internal_id, currentStatus, student.name);
+                };
+
+                tbody.appendChild(tr);
+            });
+
+            applyColumnVisibility('event');
+        }
+
+        async function openStatusSelection(internalId, currentStatus, name) {
+            const targets = ['arrived', 'reception_done', 'guiding'];
+            const availableTargets = targets.filter(t => t !== currentStatus);
+
+            if (availableTargets.length === 0) {
+                alert("変更可能なステータスがありません");
+                return;
+            }
+
+            // Prep Global Pending (though we pass specific status in click)
+            pendingChange = {
+                internalId,
+                eventId: currentEventId,
+                preset: currentPreset
+            };
+
+            const msg = `${name} さんのステータスを変更します。選択してください:`;
+            document.getElementById('statusSelectionMessage').innerText = msg;
+
+            const btnContainer = document.getElementById('statusSelectionButtons');
+            btnContainer.innerHTML = '';
+
+            const map = PRESET_STATUSES[currentPreset];
+
+            availableTargets.forEach(tgt => {
+                const btn = document.createElement('button');
+                btn.className = 'btn-primary'; // Unified shape
+                btn.style.padding = '0.75rem 1.5rem';
+
+                let label = map[tgt];
+                let color = '';
+
+                // Custom labels for "Reverting" context
+                if (tgt === 'arrived') {
+                    label = '到着済みに戻す';
+                    color = '#ef4444'; // Red
+                } else if (tgt === 'reception_done') {
+                    if (currentStatus === 'guiding') {
+                        label = '受付済みに戻す';
+                    }
+                    color = '#3b82f6'; // Blue
+                } else if (tgt === 'guiding') {
+                    color = '#10b981'; // Green
+                }
+
+                if (color) {
+                    btn.style.backgroundColor = color;
+                    btn.style.borderColor = color;
+                }
+
+                btn.innerText = label;
+                btn.onclick = () => selectStatus(tgt);
+                btnContainer.appendChild(btn);
+            });
+
+            openModal('statusSelectionModal');
+        }
+
+        async function selectStatus(nextStatus) {
+            if (!pendingChange) return;
+
+            // Execute update
+            await updateAttendance(pendingChange.eventId, pendingChange.internalId, nextStatus, null, pendingChange.preset);
+
+            closeModal('statusSelectionModal');
+
+            // Refresh list
+            await showReceptionEventDetails(pendingChange.eventId);
+
+            // Simple re-search:
+            const term = document.getElementById('studentSearch').value;
+            if (term) filterStudents(term);
+
+            pendingChange = null;
+        }
+
+        // Search Logic
+        const searchInput = document.getElementById('studentSearch');
+        const handler = (e) => filterStudents(e.target.value);
+        searchInput.addEventListener('input', handler);
+        searchInput.addEventListener('search', handler);
+
+        function toKatakana(str) {
+            return str.replace(/[\u3041-\u3096]/g, function (match) {
+                var chr = match.charCodeAt(0) + 0x60;
+                return String.fromCharCode(chr);
+            });
+        }
+
+        function filterStudents(term) {
+            const checkedStatuses = Array.from(document.querySelectorAll('#statusFilters input[type="checkbox"]:checked'))
+                .map(cb => cb.value);
+
+            const defaultStatus = currentPreset === 'entry_management' ? 'not_arrived' : 'absent';
+
+            const termActive = !!term;
+            const normalizedTerm = term ? toKatakana(term).normalize('NFKC').toLowerCase() : '';
+            const rawTerm = term ? term.toLowerCase() : '';
+
+            const filtered = currentStudents.filter(s => {
+                const status = s.status || defaultStatus;
+
+                // Souhou Filter: Male only
+                // Check if gender matches 'male', 'Male', '男' etc.
+                const gender = (s.gender || '').trim();
+                // Assume 'Male' or '男'. Let's match roughly.
+                const isMale = gender === 'Male' || gender === '男' || gender === 'male';
+                if (!isMale) return false;
+
+                if (!checkedStatuses.includes(status)) return false;
+
+                if (!termActive) return true;
+
+                const name = (s.name || '').toLowerCase();
+                const kanaRaw = (s.kana || '');
+                const kanaNorm = kanaRaw.normalize('NFKC');
+                const room = (s.room || '').toString().toLowerCase(); // Room Search
+
+                return name.includes(rawTerm) || kanaNorm.includes(normalizedTerm) || room.includes(rawTerm);
+            });
+            renderEntranceList(filtered);
+        }
+
+        window.onload = async function () {
+            checkResponsiveSidebar();
+            await loadReceptionEvents();
+        };
+
+    </script>
+    <script src="js/background.js"></script>
+    <script src="js/auth.js"></script> <!-- Auth Check -->
+</body>
+
+</html>

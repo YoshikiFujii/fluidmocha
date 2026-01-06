@@ -1,0 +1,409 @@
+:root {
+    --primary-color: #4f46e5;
+    --primary-hover: #4338ca;
+    --bg-color: #f3f4f6;
+    --text-color: #1f2937;
+    --glass-bg: rgba(255, 255, 255, 0.7);
+    --glass-border: rgba(255, 255, 255, 0.5);
+    --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+}
+
+.auth-loading {
+    display: none !important;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    margin: 0;
+    color: var(--text-color);
+    color: var(--text-color);
+    background: #123;
+    /* Animated Particle Background takes over */
+    /* background: -moz-linear-gradient(top, gold 0%, rgb(190, 152, 81)); */
+    /* ... */
+    overflow: hidden;
+    /* Recommended in user snippet */
+    background-size: cover;
+    min-height: 100vh;
+}
+
+/* Glassmorphism Card */
+.glass-card {
+    background: var(--glass-bg);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid var(--glass-border);
+    box-shadow: var(--glass-shadow);
+    border-radius: 16px;
+    overflow-x: auto;
+    /* Allow horizontal scroll */
+    -webkit-overflow-scrolling: touch;
+    /* Smooth scroll on iOS */
+    /* Fix: Ensure content respects border-radius */
+}
+
+.glass-card table th,
+.glass-card table td {
+    white-space: nowrap;
+    /* Prevent wrapping to force scroll */
+}
+
+/* Login Page */
+.login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.login-box {
+    padding: 2.5rem;
+    width: 100%;
+    max-width: 400px;
+    text-align: center;
+}
+
+.login-box h1 {
+    margin-bottom: 2rem;
+    font-weight: 700;
+    color: #333;
+}
+
+.input-group {
+    margin-bottom: 1.5rem;
+    text-align: left;
+}
+
+.input-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-size: 0.875rem;
+    color: #4b5563;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 0.75rem;
+    border-radius: 8px;
+    border: 1px solid #d1d5db;
+    background: rgba(255, 255, 255, 0.8);
+    transition: all 0.3s ease;
+    box-sizing: border-box;
+    /* Important for padding */
+}
+
+.input-group input:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.2);
+}
+
+.btn-primary {
+    width: 100%;
+    padding: 0.75rem;
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.btn-primary:hover {
+    background-color: var(--primary-hover);
+}
+
+/* Dashboard Layout */
+.dashboard-container {
+    display: flex;
+    height: 100vh;
+    overflow: hidden;
+}
+
+.sidebar {
+    width: 250px;
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(12px);
+    border-right: 1px solid var(--glass-border);
+    display: flex;
+    flex-direction: column;
+    padding: 1rem;
+}
+
+.sidebar-title {
+    font-size: 1.25rem;
+    font-weight: bold;
+    /* margin-bottom handled by header */
+    text-align: center;
+    color: var(--primary-color);
+    white-space: nowrap;
+}
+
+.nav-item {
+    padding: 1rem;
+    margin-bottom: 0.5rem;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.2s;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.nav-item:hover,
+.nav-item.active {
+    background: rgba(79, 70, 229, 0.1);
+    color: var(--primary-color);
+}
+
+/* Sidebar Toggle */
+.sidebar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    padding: 0 0.5rem;
+}
+
+.sidebar-toggle {
+    cursor: pointer;
+    font-size: 1.25rem;
+    padding: 0.5rem;
+    border-radius: 8px;
+    transition: background 0.2s;
+}
+
+.sidebar-toggle:hover {
+    background: rgba(0, 0, 0, 0.05);
+}
+
+/* Collapsed Sidebar */
+.sidebar.collapsed {
+    width: 60px;
+}
+
+.sidebar.collapsed .sidebar-title {
+    display: none;
+}
+
+/* Adjust header for tight space */
+.sidebar.collapsed .sidebar-header {
+    justify-content: center;
+    padding: 0;
+}
+
+.sidebar.collapsed .nav-item {
+    justify-content: center;
+    padding: 1rem 0;
+}
+
+.sidebar.collapsed .nav-item span,
+.sidebar.collapsed .nav-item div {
+    /* Hide text nodes? */
+    display: none;
+}
+
+/* We need to hide text specifically. 
+   Assuming nav-item structure is <i class="..."></i> Text 
+   This is tricky with just text nodes. 
+   I should wrap text in span in HTML updates.
+*/
+.sidebar.collapsed .nav-text {
+    display: none;
+}
+
+.sidebar.collapsed .sidebar-toggle i {
+    /* Rotate icon if needed */
+    transform: rotate(180deg);
+}
+
+.main-content {
+    flex: 1;
+    padding: 2rem;
+    overflow-y: auto;
+}
+
+/* Header & Controls */
+.header-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+.header-controls h2 {
+    color: white;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+    margin: 0;
+}
+
+.btn-secondary {
+    background: white;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    border: 1px solid #e5e7eb;
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.2s;
+}
+
+.btn-secondary:hover {
+    border-color: var(--primary-color);
+    color: var(--primary-color);
+}
+
+/* Lists and Tables */
+.list-container {
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+}
+
+.card {
+    padding: 1.5rem;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    transition: transform 0.2s;
+    overflow: hidden;
+    /* Fix: Ensure content respects border-radius */
+}
+
+.card:hover {
+    transform: translateY(-2px);
+}
+
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 100;
+    backdrop-filter: blur(4px);
+}
+
+.modal.active {
+    display: flex;
+}
+
+.modal-content {
+    background: white;
+    padding: 2rem;
+    border-radius: 16px;
+    width: 90%;
+    max-width: 500px;
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+.hidden {
+    display: none;
+}
+
+/* Roster Settings Form Grid */
+.settings-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+}
+
+.btn-danger {
+    width: 100%;
+    padding: 0.75rem;
+    background-color: #ef4444;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.btn-danger:hover {
+    background-color: #dc2626;
+}
+
+/* Responsive Top Navigation */
+@media (max-width: 768px) {
+    .dashboard-container {
+        flex-direction: column;
+    }
+
+    .sidebar {
+        width: 100% !important;
+        /* Override collapsed width if set */
+        height: auto;
+        flex-direction: row;
+        align-items: center;
+        padding: 0.5rem 1rem;
+        border-right: none;
+        border-bottom: 1px solid var(--glass-border);
+        background: rgba(255, 255, 255, 0.95);
+        /* More opaque for top bar */
+        justify-content: space-between;
+    }
+
+    .sidebar-header {
+        margin-bottom: 0;
+        padding: 0;
+    }
+
+    .sidebar-toggle {
+        display: none;
+        /* Hide toggle on mobile */
+    }
+
+    .sidebar-title {
+        display: block !important;
+        /* Ensure title is visible even if collapsed class was present */
+        margin: 0;
+        text-align: left;
+        font-size: 1rem;
+    }
+
+    /* .sidebar > div:not(.sidebar-header) {
+        display: none; 
+    } */
+    /* The above rule would hide nav items. We want them visible! */
+
+    /* Container for nav items - they are siblings of header. Use flex-grow? */
+    /* Or just let them flow. */
+
+    .nav-item {
+        margin-bottom: 0;
+        padding: 0.5rem;
+        font-size: 0.9rem;
+        flex-direction: row;
+        /* Horizontal icons + text */
+        gap: 5px;
+        white-space: nowrap;
+        /* Prevent line breaks */
+    }
+
+    .nav-item .nav-text {
+        display: none !important;
+        /* Hide text on mobile/horizontal */
+    }
+
+    /* If row layout, we need to handle the logout "margin-top: auto" wrapper */
+    .sidebar>div[style*="margin-top: auto"] {
+        margin-top: 0 !important;
+        margin-left: auto;
+        /* Push logout to the right */
+    }
+
+    /* We need a container for nav items to keep them together on the right */
+    /* Since HTML structure is flat, let's use flex order or just trust space-between */
+    /* Structure: Header, NavItem, NavItem, Div(Logout) */
+
+    /* Let's layout: Header (Left), Nav Items (Center/Right), Logout (Right) */
+    /* But standard flex space-between spreads them out. */
+}
